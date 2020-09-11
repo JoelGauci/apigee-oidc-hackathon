@@ -211,7 +211,7 @@ Later, you will be able to check user's consent from the **Consents** tab:
 
 The basic configuration we want to implement is over! Let's test it quickly!
 
-### testing our keycloak configuration
+### keycloak configuration testing
 
 For this, we need endpoints information regarding our keycloak IdP...
 
@@ -221,24 +221,24 @@ You can access the **list of exposed endpoints** (+some other info) using the fo
 
 If you invoke this URL using a REST client (like [hoppscotch.io](https://hoppscotch.io/)), you should see a response like this one (I just provide an extract of the JSON response):
 
-```
+<pre><code>
 {
-  "issuer": "https://a.b.c.d.xip.io/auth/realms/master",
-  "authorization_endpoint": "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/auth",
-  "token_endpoint": "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/token",
-  "introspection_endpoint": "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/token/introspect",
-  "userinfo_endpoint": "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/userinfo",
-  "end_session_endpoint": "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/logout",
-  "jwks_uri": "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/certs",
+  <b>"issuer"</b>: "https://a.b.c.d.xip.io/auth/realms/master",
+  <b>"authorization_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/auth",
+  <b>"token_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/token",
+  <b>"introspection_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/token/introspect",
+  <b>"userinfo_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/userinfo",
+  <b>"end_session_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/logout",
+  <b>"jwks_uri"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/certs",
   "check_session_iframe": "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/login-status-iframe.html",
-  "grant_types_supported": [
+  <b>"grant_types_supported"</b>: [
     "authorization_code",
     "implicit",
     "refresh_token",
     "password",
     "client_credentials"
   ],
-  "response_types_supported": [
+  <b>"response_types_supported"</b>: [
     "code",
     "none",
     "id_token",
@@ -249,14 +249,17 @@ If you invoke this URL using a REST client (like [hoppscotch.io](https://hoppsco
     "code id_token token"
   ],
   ...
-```
+</code></pre>
+
 ... where ```a.b.c.d.xip.io``` is your valid keycloak hostname!
 
-In order to quickly test your configuration, execute the following URL into your Chrome Web browser:
+In order to quickly test your configuration, execute the following authorization URL into your Chrome Web browser (replace $KEYCLOAK_HOST_NAME with your own value):
 
-```
-https://$KEYCLOAK_HOST_NAME/auth/realms/demo/protocol/openid-connect/auth?client_id=my-client-app&response_type=code&state=blablabla&redirect_uri=https://localhost/redirect
-```
+<pre><code>
+https://$KEYCLOAK_HOST_NAME/auth/realms/demo/protocol/openid-connect/auth?<b>client_id=my-client-app</b>&<b>response_type=code</b>&state=blablabla&<b>redirect_uri=https://localhost/redirect</b>
+</code></pre>
+
+> Important: **client_id**, **response_type** and **redirect_uri** are required query parameters. It is also a best practice to provide a **state** parameter
 
 You will be redirected to the login page of keycloak demo realm:
 
@@ -271,14 +274,14 @@ Once authenticated, you reach the consent page (default one w/ keycloak logo).
 
 As an authenticated user you can (or not) give the client app (**my-client-app**) access to some of your user information: user profile, email address, user roles... so make the right choice !
 
-If you give your consent you are redirected (```HTTP 302```) to the client app redirect URI: ```https://localhost/redirect```
+If you give your consent you are redirected (```HTTP 302```) to the valid client app redirect URI: ```https://localhost/redirect```
 
 Look at the query parameters provided on this redirection URL... you should see an **authorization code** (```code=xxx```). This code would be used by the client app to access a valid JWT token that would contain an OAuth2.0 access token:
 
-```
-https://localhost/redirect?state=blablabla&session_state=2a7f170b-c3db-4e10-858b-2a2559eaf060**&code=8b773b67-df66-4cd0-a271-4dcf53b723d8.2a7f170b-...-214**
-```
+<pre><code>
+https://localhost/redirect?state=blablabla&session_state=2a7f170b-c3db-4e10-858b-2a2559eaf060&<b>code</b>=8b773b67-df66-4cd0-a271-4dcf53b723d8.2a7f170b-...-214
+</code></pre>
 
-The basic keycloak configuration is now in place!!! **Well done!**
+Your basic keycloak configuration is now in place!!! **Well done!**
 
 
