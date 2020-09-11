@@ -271,9 +271,11 @@ Once authenticated, you may have to modify the user's password - as it is your f
 
 <img src="./pictures/_H.png" width="500">
 
-Once authenticated, you reach the consent page (default one w/ keycloak logo). 
+Once authenticated, you reach the consent page (default one w/ keycloak logo):
 
-As an authenticated user you can (or not) give the client app (**my-client-app**) access to some of your user information: user profile, email address, user roles... so make the right choice !
+<img src="./pictures/_I.png" width="500">
+
+As an authenticated user you can (or not) give the client app (**my-client-app**) access to some of your protected user information: user profile, email address, user roles... so make the right choice !
 
 If you give your consent you are redirected (```HTTP 302```) to the valid client app redirect URI: ```https://localhost/redirect```
 
