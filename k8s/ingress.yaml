@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: keycloak
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "${ADDRESS_NAME}"
+spec:
+  tls:
+    - hosts:
+      - ${KEYCLOAK_HOST_NAME}
+      secretName: tls-secret
+  rules:
+  - host: ${KEYCLOAK_HOST_NAME}
+    http:
+      paths:
+      - backend:
+          serviceName: keycloak
+          servicePort: 8080
+
