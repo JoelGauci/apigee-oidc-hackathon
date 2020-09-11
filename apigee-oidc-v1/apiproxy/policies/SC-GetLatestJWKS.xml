@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="false" continueOnError="false" enabled="true" name="SC-GetLatestJWKS">
+    <DisplayName>SC-GetLatestJWKS</DisplayName>
+    <Properties/>
+    <Request clearPayload="true" variable="JWKS.request">
+        <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    </Request>
+    <Response>JWKS.Response</Response>
+    <HTTPTargetConnection>
+        <Properties/>
+        <URL>https://{flow.idp.jwks.hostname}/{flow.idp.jwks.endpoint}</URL>
+    </HTTPTargetConnection>
+</ServiceCallout>

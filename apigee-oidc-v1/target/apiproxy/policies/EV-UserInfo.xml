@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="true" enabled="true" name="EV-UserInfo">
+    <DisplayName>EV-UserInfo</DisplayName>
+    <Source>calloutUserInfoResponse</Source>
+    <JSONPayload>
+        <Variable name="subject.sub" type="string">
+            <JSONPath>$.sub</JSONPath>
+        </Variable>
+        <Variable name="subject.email" type="string">
+            <JSONPath>$.email</JSONPath>
+        </Variable>
+        <Variable name="subject.name" type="string">
+            <JSONPath>$.name</JSONPath>
+        </Variable>
+        <Variable name="subject.given_name" type="string">
+            <JSONPath>$.given_name</JSONPath>
+        </Variable>
+        <Variable name="subject.family_name" type="string">
+            <JSONPath>$.family_name</JSONPath>
+        </Variable>
+    </JSONPayload>
+    <VariablePrefix>oidc.flow.idp.user</VariablePrefix>
+</ExtractVariables>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="false" continueOnError="false" enabled="true" name="SC-GetUserInfo">
+    <DisplayName>SC-GetUserInfo</DisplayName>
+    <Properties/>
+    <Request clearPayload="true">
+        <Set>
+            <Headers>
+                <Header name="Authorization">Bearer {oidc.flow.idp.access_token}</Header>
+            </Headers>
+        </Set>
+        <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    </Request>
+    <Response>calloutUserInfoResponse</Response>
+    <HTTPTargetConnection>
+        <Properties/>
+        <URL>https://{flow.idp.userinfo.hostname}/{flow.idp.userinfo.endpoint}</URL>
+    </HTTPTargetConnection>
+</ServiceCallout>

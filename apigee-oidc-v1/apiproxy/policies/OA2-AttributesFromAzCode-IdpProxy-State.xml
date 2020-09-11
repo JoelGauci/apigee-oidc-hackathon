@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<GetOAuthV2Info name="OA2-AttributesFromAzCode-IdpProxy-State">
+    <AuthorizationCode ref="oauthv2authcode.OA2-AttributesFromAzCode-IdpProxy.idpProxyState"/>
+    <IgnoreAccessTokenStatus>true</IgnoreAccessTokenStatus>
+</GetOAuthV2Info>

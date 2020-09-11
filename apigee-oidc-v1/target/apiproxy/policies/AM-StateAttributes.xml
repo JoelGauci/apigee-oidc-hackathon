@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-StateAttributes">
+    <DisplayName>AM-StateAttributes</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>request.queryparam.client_id</Name>
+        <Ref>oauthv2authcode.OA2-AttributesFromAzCode-State.client_id</Ref>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>oidc.flow.callback.redirect_uri</Name>
+        <Ref>oauthv2authcode.OA2-AttributesFromAzCode-State.redirect_uri</Ref>
+    </AssignVariable>
+    <AssignVariable>
+        <Name>oidc.flow.callback.response_type</Name>
+        <Ref>oauthv2authcode.OA2-AttributesFromAzCode-State.response_type</Ref>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

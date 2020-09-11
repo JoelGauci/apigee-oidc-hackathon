@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="EV-InputFormParams-Token">
+    <DisplayName>EV-InputFormParams-Token</DisplayName>
+    <Source>request</Source>
+    <FormParam name="state">
+        <Pattern ignoreCase="true">{state}</Pattern>
+    </FormParam>
+    <FormParam name="code">
+        <Pattern ignoreCase="true">{code}</Pattern>
+    </FormParam>
+    <VariablePrefix>oidc.flow.token</VariablePrefix>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

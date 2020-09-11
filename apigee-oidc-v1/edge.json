@@ -1,0 +1,168 @@
+{
+    "version": "1.0",
+    "envConfig": {
+        "test": {
+            "targetServers": [],
+            "virtualHosts": [],
+            "caches": [
+                {
+                    "name": "IDP_JWKS_CACHE",
+                    "description": "IdP JWKS Response Cache"
+                }
+            ],
+            "kvms": [
+                {
+                    "name": "idpConfig",
+                    "entry": [
+                        {
+                            "name": "idp.apigee.redirect_uri",
+                            "value": "TEST.IDP_APIGEE_REDIRECT_URI"
+                        },
+                        {
+                            "name": "idp.atz_code_to_token.endpoint",
+                            "value": "TEST.IDP_ATZ_CODE_TO_TOKEN_ENDPOINT"
+                        },
+                        {
+                            "name": "idp.atz_code.endpoint",
+                            "value": "TEST.IDP_ATZ_CODE_ENDPOINT"
+                        },
+                        {
+                            "name": "idp.atz_code.hostname",
+                            "value": "TEST.IDP_ATZ_CODE_HOSTNAME"
+                        },
+                        {
+                            "name": "idp.issuer",
+                            "value": "TEST.IDP_ISSUER"
+                        },
+                        {
+                            "name": "idp.jwks.endpoint",
+                            "value": "TEST.IDP_JWKS_ENDPOINT"
+                        },
+                        {
+                            "name": "idp.jwks.hostname",
+                            "value": "TEST.IDP_JWKS_HOSTNAME"
+                        },
+                        {
+                            "name": "idp.userinfo.endpoint",
+                            "value": "TEST.IDP_USERINFO_ENDPOINT"
+                        },
+                        {
+                            "name": "idp.userinfo.hostname",
+                            "value": "TEST.IDP_USERINFO_HOSTNAME"
+                        }
+                    ]
+                }
+            ],
+            "extensions":[]
+        },
+        "prod": {
+            "targetServers": [],
+            "virtualHosts": [ ],
+            "caches": [
+                {
+                    "name": "IDP_JWKS_CACHE",
+                    "description": "IdP JWKS Response Cache"
+                }
+            ],
+            "kvms": [
+                {
+                    "name": "idpConfig",
+                    "entry": [
+                        {
+                            "name": "idp.apigee.redirect_uri",
+                            "value": "PROD.IDP_APIGEE_REDIRECT_URI"
+                        },
+                        {
+                            "name": "idp.atz_code_to_token.endpoint",
+                            "value": "PROD.IDP_ATZ_CODE_TO_TOKEN_ENDPOINT"
+                        },
+                        {
+                            "name": "idp.atz_code.endpoint",
+                            "value": "PROD.IDP_ATZ_CODE_ENDPOINT"
+                        },
+                        {
+                            "name": "idp.atz_code.hostname",
+                            "value": "PROD.IDP_ATZ_CODE_HOSTNAME"
+                        },
+                        {
+                            "name": "idp.issuer",
+                            "value": "PROD.IDP_ISSUER"
+                        },
+                        {
+                            "name": "idp.jwks.endpoint",
+                            "value": "PROD.IDP_JWKS_ENDPOINT"
+                        },
+                        {
+                            "name": "idp.jwks.hostname",
+                            "value": "PROD.IDP_JWKS_HOSTNAME"
+                        },
+                        {
+                            "name": "idp.userinfo.endpoint",
+                            "value": "PROD.IDP_USERINFO_ENDPOINT"
+                        },
+                        {
+                            "name": "idp.userinfo.hostname",
+                            "value": "PROD.IDP_USERINFO_HOSTNAME"
+                        }
+                    ]
+                }
+            ],
+            "extensions":[ ]
+        }
+    },
+    "orgConfig": {
+        "apiProducts": [
+            {
+                "name": "IdentityProduct",
+                "apiResources": [
+                    "/",
+                    "/**"
+                ],
+                "approvalType": "auto",
+                "attributes": [
+                    {
+                        "name": "description",
+                        "value": "identity product"
+                    },
+                    {
+                        "name": "access",
+                        "value": "public"
+                    }
+                ],
+                "description": "identity product used to test OIDC support on Apigee",
+                "displayName": "Identity Product",
+                "environments": [
+                    "test"
+                ],
+                "proxies": [
+                    "apigee-oidc-v1"
+                ],
+                "quota": "100",
+                "quotaInterval": "1",
+                "quotaTimeUnit": "minute",
+                "scopes": []
+            }
+        ],
+        "developers": [
+            {
+                "email": "helene.dozi.demo@gmail.com",
+                "firstName": "Helene",
+                "lastName": "Dozi",
+                "userName": "helenedozi",
+                "attributes": []
+            }
+        ],
+        "developerApps": {
+            "helene.dozi.demo@gmail.com": [
+                {
+                    "name": "identityApp",
+                    "apiProducts": [ "IdentityProduct" ],
+                    "callbackUrl": "https://localhost/redirect",
+                    "scopes": []
+                }
+            ]
+        }
+    }
+    ,"apiConfig": {}
+}
+
