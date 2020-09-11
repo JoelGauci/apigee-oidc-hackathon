@@ -35,7 +35,8 @@ This is why we are going to set a static IP address in GCP, that we can use on a
 So at this step, please:
 1. connect to your GCP console
 2. create a project or use an existing one
-... then from a terminal:
+... then from a terminal (and from the root of the cloned repo):
+
 ```
 $ gcloud update
 $ gcloud init
@@ -94,7 +95,7 @@ $ kubectl config current-context
 Now that your cluster has been created and your gcloud context has been set, you can deploy keycloak on the target cluster:
 
 ```
-kubectl create -f https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak.yaml
+kubectl create -f ./k8s/keycloak.yaml
 ```
 This will start Keycloak on Kuberneters. It will also create an initial **admin** user with username ```admin``` and password... ```admin``` ;-)
 
@@ -111,7 +112,7 @@ $ kubectl create secret tls tls-secret --cert=tls.cert --key=tls.key
 
 Create the ingress that will be the entry point to access the keycloack UI (```ingress.yaml``` is provided in the repo):
 ```
- $ template=`cat ingress.yaml`
+ $ template=`cat ./k8s/ingress.yaml`
  $ set -e
 eval "cat <<EOF
 $template
