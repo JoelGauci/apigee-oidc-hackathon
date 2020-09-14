@@ -285,6 +285,19 @@ Look at the query parameters provided on this redirection URL... you should see 
 https://localhost/redirect?state=blablabla&session_state=2a7f170b-c3db-4e10-858b-2a2559eaf060&<b>code</b>=8b773b67-df66-4cd0-a271-4dcf53b723d8.2a7f170b-...-214
 </code></pre>
 
-Your basic keycloak configuration is now in place!!! **Well done!**
+The very last step, before deploying Apigee artifacts is to store the client secret of ```my-client-app``` into a dedicated environment variable:
 
+Please go back to the **Clients** section of your keycloak UI and select your client (```my-client-app```)
+
+Click the **Credentials** tab and copy the value of my-client-app's client secret:
+
+<img src="./pictures/_J.png" width="500">
+
+In your terminal, create the **APP_CLIENT_SECRET** env variable:
+
+```
+$ export APP_CLIENT_SECRET={THE_VALUE_OF_YOUR_CLIENT_SECRET}
+```
+
+Your basic keycloak configuration is now in place!!! **Well done!**
 
