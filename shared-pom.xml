@@ -79,6 +79,13 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>create-config-kvms</id>
+                        <phase>verify</phase>                        
+                        <goals>
+                            <goal>kvms</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>create-config-targetserver</id>
                         <phase>verify</phase>                        
                         <goals>
@@ -115,7 +122,63 @@
                     </execution>
                 </executions>
             </plugin>            
-
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                    <phase>process-resources</phase>
+                    <goals>
+                        <goal>replace</goal>
+                    </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <basedir>${target.root.dir}</basedir>
+                    <includes>
+                    <include>edge.json</include> <!-- path to your edge.json -->
+                    </includes>
+                    <replacements>
+                    <replacement>
+                        <token>TEST.IDP_APIGEE_REDIRECT_URI</token>
+                        <value>${TEST_IDP_APIGEE_REDIRECT_URI}</value>
+                    </replacement>
+                    <replacement>
+                        <token>TEST_IDP_ATZ_CODE_TO_TOKEN_ENDPOINT</token>
+                        <value>${TEST_IDP_ATZ_CODE_TO_TOKEN_ENDPOINT}</value>
+                    </replacement>
+                    <replacement>
+                        <token>TEST_IDP_ATZ_CODE_ENDPOINT</token>
+                        <value>${TEST_IDP_ATZ_CODE_ENDPOINT}</value>
+                    </replacement>
+                    <replacement>
+                        <token>TEST_IDP_ATZ_CODE_HOSTNAME</token>
+                        <value>${TEST_IDP_ATZ_CODE_HOSTNAME}</value>
+                    </replacement>
+                    <replacement>
+                        <token>TEST_IDP_ISSUER</token>
+                        <value>${TEST_IDP_ISSUER}</value>
+                    </replacement>
+                    <replacement>
+                        <token>TEST_IDP_JWKS_ENDPOINT</token>
+                        <value>${TEST_IDP_JWKS_ENDPOINT}</value>
+                    </replacement>
+                    <replacement>
+                        <token>TEST_IDP_JWKS_HOSTNAME</token>
+                        <value>${TEST_IDP_JWKS_HOSTNAME}</value>
+                    </replacement>
+                    <replacement>
+                        <token>TEST_IDP_USERINFO_ENDPOINT</token>
+                        <value>${TEST_IDP_USERINFO_ENDPOINT}</value>
+                    </replacement>
+                    <replacement>
+                        <token>TEST_IDP_USERINFO_HOSTNAME</token>
+                        <value>${TEST_IDP_USERINFO_HOSTNAME}</value>
+                    </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <profiles>

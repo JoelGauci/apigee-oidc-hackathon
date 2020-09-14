@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="KVM-IdpParameters" mapIdentifier="idpParameters_oidc">
+<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="KVM-IdpParameters" mapIdentifier="idpConfig">
     <DisplayName>KVM-IdpParameters</DisplayName>
     <ExpiryTimeInSecs>5</ExpiryTimeInSecs>
     <Get assignTo="flow.idp.apigee.redirect_uri" index="1">

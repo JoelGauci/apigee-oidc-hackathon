@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<GetOAuthV2Info name="OA2-AttributesFromAzCode-IdpProxy">
-    <AuthorizationCode ref="oidc.flow.token.code"/>
-    <IgnoreAccessTokenStatus>true</IgnoreAccessTokenStatus>
-</GetOAuthV2Info>
