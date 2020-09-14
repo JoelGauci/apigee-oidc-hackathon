@@ -24,7 +24,7 @@ cd ./apigee-oidc-v1
 #################################
 function set_idp_env_var() {
     # retrieve configuration data from a keycloak endpoint
-    response=$(curl --silent -X GET -H "Accept:application/json" https://34.120.206.146.xip.io/auth/realms/demo/.well-known/openid-configuration)
+    response=$(curl --silent -X GET -H "Accept:application/json" https://$KEYCLOAK_HOST_NAME/auth/realms/demo/.well-known/openid-configuration)
     if [ $( grep -c error <<< "$response" ) -ne 0  ]; then
         echo "$response"
         
