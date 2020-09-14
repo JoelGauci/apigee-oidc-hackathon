@@ -301,3 +301,58 @@ $ export APP_CLIENT_SECRET={THE_VALUE_OF_YOUR_CLIENT_SECRET}
 
 Your basic keycloak configuration is now in place!!! **Well done!**
 
+## step-3: deploy Apigee technical artifacts (~10')
+Please clone the github repo of the identity hackathon if not done yet. You should be able to get all the Apigee material we will use during the hackthon
+
+First we are going to check that all the required env variables have been defined. Indeed, we use maven to deploy config and proxy on Apigee Edge for Public Cloud and for this we need credentials...that can be set as env variables! + we want to chck that keycloak hostname and app secret have been set also !
+
+In your terminal, at the root level of the **apigee-oidc-hackathon** directory, execute the follwing script:
+
+```
+$ ./check_envvar.sh
+```
+
+The response should be similar to the following one:
+
+<pre><code>
+<b>APIGEE_ORG</b> is set!
+<b>APIGEE_USER</b> is set!
+<b>APIGEE_PASSWORD</b> is set!
+<b>KEYCLOAK_HOST_NAME</b> is set!
+<b>APP_CLIENT_SECRET</b> is set!
+</code></pre>
+
+In case of a problem with one or several env variables, it is time to fix it!
+
+You are now ready to deploy the Apigee technical artifacts for he hackathon. Here are the elements that will be loaded on your Apigee organization:
+1. **apigee-oidc-v1**: API Proxy
+2. **IdentityProduct**: API Product
+3. **identityApp**: application
+4. **helene.dozi.demo@gmail.com**: App developer
+5. **IDP_JWKS_CACHE**: environment (*test*) cache
+6. **idpConfig**: environment (*test*) KVM (Key Value Map)
+
+The KVM contains all the parameters required to connect the keycloak IdP
+
+Let's deploy these 6 elements:
+
+```
+$ ./pipeline.sh
+```
+
+You can follow the deployment process (```set -x``` enables a mode of the shell where all executed commands are printed to the terminal)
+
+At the end of the build process, you should see a response/status like this one:
+
+```
+[INFO] Update Success.
+[INFO] ---------
+[INFO] BUILD SUCCESS
+[INFO] ---------
+[INFO] Total time: 22.539 s
+[INFO] Finished at: 2020-09-14T18:06:16+02:00
+[INFO] ---------
+``` 
+
+Take some time to connect to your Apigee organization and have a look on the different objects, which have been created.
+
