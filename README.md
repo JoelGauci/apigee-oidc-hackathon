@@ -508,4 +508,4 @@ Each time the access token will be checked on the identity proxy (Apigee) it wil
 
 Take time to investigate the different endpoints exposed by the ```apigee-oidc-v1``` proxy but also the technical artifacts deployed on your Apigee organization.
 
-Your basic keycloak configuration is now in place!!! **Well done!**
+You have reached the end of the identity hackathon!!! **Well done!**
