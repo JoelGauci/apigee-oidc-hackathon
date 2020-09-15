@@ -301,7 +301,7 @@ $ export APP_CLIENT_SECRET={THE_VALUE_OF_YOUR_CLIENT_SECRET}
 
 Your basic keycloak configuration is now in place!!! **Well done!**
 
-## step-3: deploy Apigee technical artifacts (~10')
+## step-3: deploy Apigee technical artifacts (~15')
 Please clone the github repo of the identity hackathon if not done yet. You should be able to get all the Apigee material we will use during the hackthon
 
 First we are going to check that all the required env variables have been defined. Indeed, we use maven to deploy config and proxy on Apigee Edge for Public Cloud and for this we need credentials...that can be set as env variables! + we want to chck that keycloak hostname and app secret have been set also !
@@ -340,7 +340,7 @@ Let's deploy these 6 elements:
 $ ./pipeline.sh
 ```
 
-You can follow the deployment process (```set -x``` enables a mode of the shell where all executed commands are printed to the terminal)
+You can follow the deployment process: ```set -x``` (in the ```pipeline.sh``` script) enables a mode of the shell where all executed commands are printed to the terminal
 
 At the end of the build process, you should see a response/status like this one:
 
@@ -356,3 +356,156 @@ At the end of the build process, you should see a response/status like this one:
 
 Take some time to connect to your Apigee organization and have a look on the different objects, which have been created.
 
+## Apigee used as an identity proxy
+
+OIDC allows an application to use an authority to:
+- Verify end user’s identity (Signed JWT - id_token)
+- Fetch end user’s profile info (UserInfo Endpoint)
+- Gain limited access to end user’s data (Access token)
+
+The Identity Provider is the server offering the authentication service. 
+
+It combines the roles of OAuth Authorization Server & Resource Server, the resource being the End-User’s identity.
+
+It is made of 4 Endpoints (HTTP resources) : 
+ - Authorization Endpoint, 
+ - Token Endpoint, 
+ - UserInfo Endpoint, 
+ - Redirect Endpoint.
+
+It distributes OAuth tokens as well as an ID Token in JWT format.
+
+In the hackathon, we use the **authorization code flow**
+
+The URL used to initiate the authorization code flow is of the form:
+
+<pre><code>
+GET /authorize?
+  <b>response_type=code</b>
+  <b>&scope</b>=openid%20profile%20email%20address%20phone
+  <b>&client_id</b>=s6BhdRkqt3
+  <b>&state</b>=af0ifjsldkj
+  <b>&redirect_uri</b>=https%3A%2F%2Fclient.example.org%2Fcb 
+HTTP/1.1
+Host: server.example.com
+</code></pre>
+
+The response of the authorization code flow is a redirection to the client app's callback/redirect URL, as presented here:
+<pre><code>
+HTTP/1.1 302 Found
+Location: https://client.example.org/cb
+  <b>?code=SplxlOBeZQQYbYS6WxSbIA</b>
+  <b>&state</b>=af0ifjsldkj
+</code></pre>
+
+The client app uses the authorization code to get a valid access token or ID Token
+
+When Apigee plays the role of an **identity proxy** in front of an IdP (like keycloak), here is a solution presented as a sequence diagram:
+
+<img src="./pictures/OIDC_PKCE.png">
+
+In this solution, a client app consumes an API using an access token. Apigee verifies the access token and extract the JWT token that hes been previously set as an attribute of the access token, during the OIDC/OAuth "*dance*":
+
+<img src="./pictures/Apigee_identity_proxy.png" width="500">
+
+### Deep dive into the API Proxy
+
+At this step, we are going to connect to the ```apigee-oidc-v1``` API Proxy and activate the trace:
+
+<img src="./pictures/_K.png" width="500">
+
+Open your favorite Web browser and execute the following URL:
+
+<pre><code>
+https://$APIGEE_ORG-test.apigee.net/v1/oauth20/authorize?
+  <b>client_id</b>=my-client-app
+  <b>&response_type</b>=code
+  <b>&state</b>=1234567890-ABCD
+  <b>&redirect_uri</b>=https://localhost/redirect
+</code></pre>
+
+You will be redirected to your keycloak authentication page:
+
+<img src="./pictures/_L.png" width="500">
+
+Enter ```jeanmartin```'s login and password that you have set when creating this user
+
+<img src="./pictures/_M.png" width="500">
+
+You now access the consent page. The question here is simple: you have just been authenticated but do you give your consent in order for ```my-client-app`` (client application) to access your personal data (email addres, address, phone number...)?
+
+<img src="./pictures/_N.png" width="500">
+
+Once you have clicked yes you can see (in the web browser) that you have been redirected to an URL of the form:
+
+<pre><code>
+https://localhost/redirect?
+  <b>code</b>=gj6I3rDP
+  <b>&state</b>=1234567890-ABCD
+</code></pre>
+
+The redirection to the client app has been executed and an authorization code + state parameter have been pushed to the app (the redirect url intentionally uses ```localhost```)
+
+Please copy the value of the authorization code and uses an HTTP client (cURL, postman, postwoman/hoppscotch,...) in order to POST data that will allow you retrieving a valid access token and refresh token:
+
+<img src="./pictures/_O.png" width="500">
+
+The response is based on a JSON content type. Here is an extract showing the type of value you should get as a response:
+
+```
+{
+  ...
+  "access_token": "AGwNYtp04irLlWERipYOFvVKv3bF",
+  "refresh_token": "m3qnGAdq9NB3fnKFwSM4TVQ1HMXLHsZH",
+  "subject.email": "jean.martin.demo@gmail.com",
+  "subject.family_name": "Martin",
+  "status": "approved",
+  "expires_in": ...
+}
+```
+
+The following Apigee traces depict what's happening on the Apigee side when the process you have just executed is performed:
+
+First, the intial request is received by Apigee through an ```authorization``` endpoint. Apigee acts as an identity proxy:
+
+<img src="./pictures/_P.png" width="500">
+
+The result of this flow is a redirection to the keycloak IdP - cf. the **Location** parameter:
+
+<img src="./pictures/_Q.png" width="500">
+
+The keycloak IdP then redirects its authorization code and own state to the Apigee ```callback``` URL (after authentication and consent of the user):
+
+<img src="./pictures/_R.png" width="500">
+
+After verifications and controls a redirection is done to the client app redirection URI. Now Apigee hiddes keycloak parameters, produces its own authorization code and uses the initial state parameter (pushed by the client app):
+
+<img src="./pictures/_S.png" width="500">
+
+The client app uses the Apigee authorization code to get an access token, using the Apigee dedicated ```token``` endpoint (cf. the form parameters in the request body):
+
+<img src="./pictures/_T.png" width="500">
+
+Apigee connects to the keycloak IdP (using a ```ServiceCallout``` policy) to get a valid JWT token, as presented here:
+
+<img src="./pictures/_U.png" width="500">
+
+If you copy the ID token from the trace and paste it into [jwt.io](https://jwt.io/), you can see the token info decoded. 
+
+Here is an example:
+
+<img src="./pictures/_V.png" width="500">
+
+User info can also be decoded from the token:
+
+<img src="./pictures/_V1.png" width="300">
+
+Finally, the Apigee token endpoint response can be seen in the trace. It consists of a valid JSON message that includes: access token, refresh token, token expiry,...The ID token is not presented to the client app but has been set as an attrtibute of the access token.
+
+<img src="./pictures/_W.png" width="500">
+
+Each time the access token will be checked on the identity proxy (Apigee) it will be possible to get the ID token attribute and inject it (or part of its info) to the backend resources
+
+Take time to investigate the different endpoints exposed by the ```apigee-oidc-v1``` proxy but also the technical artifacts deployed on your Apigee organization.
+
+Your basic keycloak configuration is now in place!!! **Well done!**
