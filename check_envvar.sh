@@ -27,9 +27,10 @@ function check_envvars() {
     for v in $varlist; do
         if [ -z "${!v}" ]; then
             >&2 echo "Required environment variable $v is not set."
-            varsnotset="T"
+            varsnotset="T" 
+        else
+	        echo "$v is set!"
         fi
-        echo "$v is set!"
     done
 
     if [ "$varsnotset" = "T" ]; then

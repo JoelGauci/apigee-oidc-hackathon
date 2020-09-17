@@ -14,6 +14,7 @@ In this hackathon, we will use the following solutions:
 1. Apigee Edge for Public Cloud: you can subscribe for a trial account [here](https://login.apigee.com/sign__up)
 1. [Maven](https://maven.apache.org/) for the deployment of the Apigee technical artifacts on your target Apigee platform (SaaS)
 1. [openssl](https://www.openssl.org/) to be able to create cryptographic objects for TLS communications
+1. Any **HTTP client** like post(wo)man or cURL
 
 ![](https://janikvonrotz.ch/images/keycloak-logo.png)
 ![](https://www.fxinnovation.com/wp-content/uploads/2019/03/Google-Cloud-Logo1.png)
@@ -33,8 +34,13 @@ Let's consider that the installation of keycloak will not only be used for this 
 This is why we are going to set a static IP address in GCP, that we can use on an ingress to access our keycloak platform
 
 So at this step, please:
-1. connect to your GCP console
-2. create a project or use an existing one
+1. clone the git repo using https: 
+
+```$ git clone https://github.com/JoelGauci/apigee-oidc-hackathon.git``` 
+
+2. All the commands must be executed at the root level of the newly created directory (**apigee-oidc-hackathon**)
+3. connect to your GCP console
+4. create a project or use an existing one
 ... then from a terminal (and from the root of the cloned repo):
 
 ```
@@ -80,12 +86,19 @@ export the keycloak hostname environment variable:
 $ export KEYCLOAK_HOST_NAME={STATIC_IP_ADDRESS}.xip.io
 $ echo $KEYCLOAK_HOST_NAME
 ```
+...where {STATIC_IP_ADDRESS} is the value of your static IP address (example: ```10.11.12.13```)
 
-At this time, please check that your kubernetes cluster has been created. Set the current context to your newly created cluster, where the name of the context is made up of gke_ plus project-id, your GCP project ID, compute-zone, and the name of the new cluster, separated with underscores (_):
+At this time, please check that your kubernetes cluster has been created. 
+
+Set the current context to your newly created cluster, where the name of the context is made up of "gke_" + project-id (your GCP project ID) + compute-zone + the name of the new cluster, separated with **underscores (_)**:
 
 ```
 $ kubectl config use-context gke_{project-id}_{compute-zone}_$CLUSTER_NAME
 ```
+
+Here is an example: ```gke_project1234_europe-west1-b_keycloak-cluster```
+
+
 Check the current context to be sure it is set to the intended cluster:
 
 ```
@@ -178,7 +191,7 @@ Modify/configure properties as defined in the following picture:
 
 <img src="./pictures/_8.png" width="600">
 
-> Important: **Access Type** set to ```confidential```, **Consent Required** set to ```on```, **Valid Redirect URIs** set to ```https://localhost/redirect```
+> Important: **Access Type** set to ```confidential```, **Consent Required** set to ```on```, **Valid Redirect URIs** set with 2 values:  ```https://localhost/redirect``` and ```https://{myorg}-test.apigee.net/v1/oauth20/callback``` ...where {myorg} is the name of your Apigee organization
 
 Keep default values for client scopes:
 
@@ -224,14 +237,14 @@ If you invoke this URL using a REST client (like [hoppscotch.io](https://hoppsco
 
 <pre><code>
 {
-  <b>"issuer"</b>: "https://a.b.c.d.xip.io/auth/realms/master",
-  <b>"authorization_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/auth",
-  <b>"token_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/token",
-  <b>"introspection_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/token/introspect",
-  <b>"userinfo_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/userinfo",
-  <b>"end_session_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/logout",
-  <b>"jwks_uri"</b>: "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/certs",
-  "check_session_iframe": "https://a.b.c.d.xip.io/auth/realms/master/protocol/openid-connect/login-status-iframe.html",
+  <b>"issuer"</b>: "https://a.b.c.d.xip.io/auth/realms/demo",
+  <b>"authorization_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/demo/protocol/openid-connect/auth",
+  <b>"token_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/demo/protocol/openid-connect/token",
+  <b>"introspection_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/demo/protocol/openid-connect/token/introspect",
+  <b>"userinfo_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/demo/protocol/openid-connect/userinfo",
+  <b>"end_session_endpoint"</b>: "https://a.b.c.d.xip.io/auth/realms/demo/protocol/openid-connect/logout",
+  <b>"jwks_uri"</b>: "https://a.b.c.d.xip.io/auth/realms/demo/protocol/openid-connect/certs",
+  "check_session_iframe": "https://a.b.c.d.xip.io/auth/realms/demo/protocol/openid-connect/login-status-iframe.html",
   <b>"grant_types_supported"</b>: [
     "authorization_code",
     "implicit",
@@ -299,12 +312,21 @@ In your terminal, create the **APP_CLIENT_SECRET** env variable:
 $ export APP_CLIENT_SECRET={THE_VALUE_OF_YOUR_CLIENT_SECRET}
 ```
 
+...where {THE_VALUE_OF_YOUR_CLIENT_SECRET} is the real value of the client secret  (example: ```85eddedb-0214-4c7c-0911-1129afc9e85f```)
+
 Your basic keycloak configuration is now in place!!! **Well done!**
 
 ## step-3: deploy Apigee technical artifacts (~15')
 Please clone the github repo of the identity hackathon if not done yet. You should be able to get all the Apigee material we will use during the hackthon
 
-First we are going to check that all the required env variables have been defined. Indeed, we use maven to deploy config and proxy on Apigee Edge for Public Cloud and for this we need credentials...that can be set as env variables! + we want to chck that keycloak hostname and app secret have been set also !
+First we are going to check that all the required env variables have been defined. Indeed, we use maven to deploy config and proxy on Apigee Edge for Public Cloud and for this we need credentials...that can be set as env variables! + we want to check that keycloak hostname and app secret have been set also !
+
+Here are the 5 env variables that MUST be set in order to execute a successfull deployment on Apigee:
+1. **APIGEE_ORG**: the name of the target Apigee organization (org) you are using for this hackathon
+2. **APIGEE_USER**: the Apigee username of the account used to connect to the Apigee Management API. Typically, this user has an ```orgadmin``` role in Apigee. If you are using an Apigee trial account, this is the username you use to connect to your Apigee org
+3. **APIGEE_PASSWORD**: the Apigee password of the account used to connect to the Apigee Management API. Typically, this user has an ```orgadmin``` role in Apigee. If you are using an Apigee trial account, this is the password you use to connect to your Apigee org
+4. **KEYCLOAK_HOST_NAME**: the hostname used to access your keycloack platform (example: ```10.11.12.13.xip.io```)
+5. **APP_CLIENT_SECRET**: the client secret of the application created in keycloak
 
 In your terminal, at the root level of the **apigee-oidc-hackathon** directory, execute the follwing script:
 
@@ -324,7 +346,10 @@ The response should be similar to the following one:
 
 In case of a problem with one or several env variables, it is time to fix it!
 
-You are now ready to deploy the Apigee technical artifacts for he hackathon. Here are the elements that will be loaded on your Apigee organization:
+You are now ready to deploy the Apigee technical artifacts for he hackathon. 
+
+Here are the elements that will be uploaded on your Apigee organization:
+
 1. **apigee-oidc-v1**: API Proxy
 2. **IdentityProduct**: API Product
 3. **identityApp**: application
@@ -449,6 +474,22 @@ The redirection to the client app has been executed and an authorization code + 
 Please copy the value of the authorization code and uses an HTTP client (cURL, postman, postwoman/hoppscotch,...) in order to POST data that will allow you retrieving a valid access token and refresh token:
 
 <img src="./pictures/_O.png" width="500">
+
+> If you use post(wo)man, do not forget to set a **basic authorization** header with the value ```my-client-app``` set as username and value of ```$APP_CLIENT_SECRET``` set as password
+
+Here is the cURL command to use:
+
+<pre><code>
+$ curl -k1 -X POST https://<b>$APIGEE_ORG</b>-test.apigee.net/v1/oauth20/token \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-H 'Accept: application/json' \
+-u my-client-app:<b>$APP_CLIENT_SECRET</b> \
+--data-urlencode '<b>code</b>=am08dFT4' \
+--data-urlencode '<b>grant_type</b>=authorization_code' \
+--data-urlencode '<b>redirect_uri</b>=https://localhost/redirect' \
+--data-urlencode '<b>state</b>=1234567890-ABCD' \
+-v
+</code></pre>
 
 The response is based on a JSON content type. Here is an extract showing the type of value you should get as a response:
 
