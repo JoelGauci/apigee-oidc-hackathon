@@ -38,7 +38,7 @@ So at this step, please:
 ... then from a terminal (and from the root of the cloned repo):
 
 ```
-$ gcloud update
+$ gcloud components update
 $ gcloud init
 ```
 
