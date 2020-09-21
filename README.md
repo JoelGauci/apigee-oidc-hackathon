@@ -191,7 +191,7 @@ Modify/configure properties as defined in the following picture:
 
 <img src="./pictures/_8.png" width="600">
 
-> Important: **Access Type** set to ```confidential```, **Consent Required** set to ```on```, **Valid Redirect URIs** set with 2 values:  ```https://localhost/redirect``` and ```https://{myorg}-test.apigee.net/v1/oauth20/callback``` ...where {myorg} is the name of your Apigee organization
+> Important: **Access Type** set to ```confidential```, **Consent Required** set to ```on```, **Valid Redirect URIs** set with 2 values:  ```https://httpbin.org/get``` and ```https://{myorg}-test.apigee.net/v1/oauth20/callback``` ...where {myorg} is the name of your Apigee organization
 
 Keep default values for client scopes:
 
@@ -270,7 +270,7 @@ If you invoke this URL using a REST client (like [hoppscotch.io](https://hoppsco
 In order to quickly test your configuration, execute the following authorization URL into your Chrome Web browser (replace $KEYCLOAK_HOST_NAME with your own value):
 
 <pre><code>
-https://$KEYCLOAK_HOST_NAME/auth/realms/demo/protocol/openid-connect/auth?<b>client_id=my-client-app</b>&<b>response_type=code</b>&state=blablabla&<b>redirect_uri=https://localhost/redirect</b>
+https://$KEYCLOAK_HOST_NAME/auth/realms/demo/protocol/openid-connect/auth?<b>client_id=my-client-app</b>&<b>response_type=code</b>&state=blablabla&<b>redirect_uri=https://httpbin.org/get</b>
 </code></pre>
 
 > Important: **client_id**, **response_type** and **redirect_uri** are required query parameters. It is also a best practice to provide a **state** parameter
@@ -290,12 +290,12 @@ Once authenticated, you reach the consent page (default one w/ keycloak logo):
 
 As an authenticated user you can (or not) give the client app (**my-client-app**) access to some of your protected user information: user profile, email address, user roles... so make the right choice !
 
-If you give your consent you are redirected (```HTTP 302```) to the valid client app redirect URI: ```https://localhost/redirect```
+If you give your consent you are redirected (```HTTP 302```) to the valid client app redirect URI: ```https://httpbin.org/get```
 
 Look at the query parameters provided on this redirection URL... you should see an **authorization code** (```code=xxx```). This code would be used by the client app to access a valid JWT token that would contain an OAuth2.0 access token:
 
 <pre><code>
-https://localhost/redirect?state=blablabla&session_state=2a7f170b-c3db-4e10-858b-2a2559eaf060&<b>code</b>=8b773b67-df66-4cd0-a271-4dcf53b723d8.2a7f170b-...-214
+https://httpbin.org/get?state=blablabla&session_state=2a7f170b-c3db-4e10-858b-2a2559eaf060&<b>code</b>=8b773b67-df66-4cd0-a271-4dcf53b723d8.2a7f170b-...-214
 </code></pre>
 
 The very last step, before deploying Apigee artifacts is to store the client secret of ```my-client-app``` into a dedicated environment variable:
@@ -446,7 +446,7 @@ https://$APIGEE_ORG-test.apigee.net/v1/oauth20/authorize?
   <b>client_id</b>=my-client-app
   <b>&response_type</b>=code
   <b>&state</b>=1234567890-ABCD
-  <b>&redirect_uri</b>=https://localhost/redirect
+  <b>&redirect_uri</b>=https://httpbin.org/get
 </code></pre>
 
 You will be redirected to your keycloak authentication page:
@@ -464,7 +464,7 @@ You now access the consent page. The question here is simple: you have just been
 Once you have clicked yes you can see (in the web browser) that you have been redirected to an URL of the form:
 
 <pre><code>
-https://localhost/redirect?
+https://httpbin.org/get?
   <b>code</b>=gj6I3rDP
   <b>&state</b>=1234567890-ABCD
 </code></pre>
@@ -486,7 +486,7 @@ $ curl -k1 -X POST https://<b>$APIGEE_ORG</b>-test.apigee.net/v1/oauth20/token \
 -u my-client-app:<b>$APP_CLIENT_SECRET</b> \
 --data-urlencode '<b>code</b>=am08dFT4' \
 --data-urlencode '<b>grant_type</b>=authorization_code' \
---data-urlencode '<b>redirect_uri</b>=https://localhost/redirect' \
+--data-urlencode '<b>redirect_uri</b>=https://httpbin.org/get' \
 --data-urlencode '<b>state</b>=1234567890-ABCD' \
 -v
 </code></pre>
