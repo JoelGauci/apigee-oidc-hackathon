@@ -109,3 +109,7 @@ mvn install -Ptest -Dapigee.config.options=update
 set_devapp_credentials
 # set developer app (my-client-app) product
 set_devapp_product
+# execute integration tests
+npm i
+npm test
+

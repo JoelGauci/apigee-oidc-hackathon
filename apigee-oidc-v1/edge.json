@@ -16,39 +16,39 @@
                     "entry": [
                         {
                             "name": "idp.apigee.redirect_uri",
-                            "value": "TEST_IDP_APIGEE_REDIRECT_URI"
+                            "value": "https://emea-poc8-test.apigee.net/v1/oauth20/callback"
                         },
                         {
                             "name": "idp.atz_code_to_token.endpoint",
-                            "value": "TEST_IDP_ATZ_CODE_TO_TOKEN_ENDPOINT"
+                            "value": "auth/realms/demo/protocol/openid-connect/token"
                         },
                         {
                             "name": "idp.atz_code.endpoint",
-                            "value": "TEST_IDP_ATZ_CODE_ENDPOINT"
+                            "value": "auth/realms/demo/protocol/openid-connect/auth"
                         },
                         {
                             "name": "idp.atz_code.hostname",
-                            "value": "TEST_IDP_ATZ_CODE_HOSTNAME"
+                            "value": "34.120.206.146.xip.io"
                         },
                         {
                             "name": "idp.issuer",
-                            "value": "TEST_IDP_ISSUER"
+                            "value": "https://34.120.206.146.xip.io/auth/realms/demo"
                         },
                         {
                             "name": "idp.jwks.endpoint",
-                            "value": "TEST_IDP_JWKS_ENDPOINT"
+                            "value": "auth/realms/demo/protocol/openid-connect/certs"
                         },
                         {
                             "name": "idp.jwks.hostname",
-                            "value": "TEST_IDP_JWKS_HOSTNAME"
+                            "value": "34.120.206.146.xip.io"
                         },
                         {
                             "name": "idp.userinfo.endpoint",
-                            "value": "TEST_IDP_USERINFO_ENDPOINT"
+                            "value": "auth/realms/demo/protocol/openid-connect/userinfo"
                         },
                         {
                             "name": "idp.userinfo.hostname",
-                            "value": "TEST_IDP_USERINFO_HOSTNAME"
+                            "value": "34.120.206.146.xip.io"
                         }
                     ]
                 }
@@ -70,39 +70,39 @@
                     "entry": [
                         {
                             "name": "idp.apigee.redirect_uri",
-                            "value": "TEST_IDP_APIGEE_REDIRECT_URI"
+                            "value": "https://emea-poc8-test.apigee.net/v1/oauth20/callback"
                         },
                         {
                             "name": "idp.atz_code_to_token.endpoint",
-                            "value": "TEST_IDP_ATZ_CODE_TO_TOKEN_ENDPOINT"
+                            "value": "auth/realms/demo/protocol/openid-connect/token"
                         },
                         {
                             "name": "idp.atz_code.endpoint",
-                            "value": "TEST_IDP_ATZ_CODE_ENDPOINT"
+                            "value": "auth/realms/demo/protocol/openid-connect/auth"
                         },
                         {
                             "name": "idp.atz_code.hostname",
-                            "value": "TEST_IDP_ATZ_CODE_HOSTNAME"
+                            "value": "34.120.206.146.xip.io"
                         },
                         {
                             "name": "idp.issuer",
-                            "value": "TEST_IDP_ISSUER"
+                            "value": "https://34.120.206.146.xip.io/auth/realms/demo"
                         },
                         {
                             "name": "idp.jwks.endpoint",
-                            "value": "TEST_IDP_JWKS_ENDPOINT"
+                            "value": "auth/realms/demo/protocol/openid-connect/certs"
                         },
                         {
                             "name": "idp.jwks.hostname",
-                            "value": "TEST_IDP_JWKS_HOSTNAME"
+                            "value": "34.120.206.146.xip.io"
                         },
                         {
                             "name": "idp.userinfo.endpoint",
-                            "value": "TEST_IDP_USERINFO_ENDPOINT"
+                            "value": "auth/realms/demo/protocol/openid-connect/userinfo"
                         },
                         {
                             "name": "idp.userinfo.hostname",
-                            "value": "TEST_IDP_USERINFO_HOSTNAME"
+                            "value": "34.120.206.146.xip.io"
                         }
                     ]
                 }
@@ -155,7 +155,7 @@
                 {
                     "name": "identityApp",
                     "apiProducts": [ "IdentityProduct" ],
-                    "callbackUrl": "https://localhost/redirect",
+                    "callbackUrl": "https://httpbin.org/get",
                     "scopes": []
                 }
             ]

@@ -1,0 +1,11 @@
+{
+  "name": "apigee-oidc-v1",
+  "scripts": {
+    "test": "./node_modules/.bin/cucumber-js test/integration/features"
+  },
+  "devDependencies": {
+    "apickli": "^2.3.3",
+    "puppeteer": "^1.16.0",
+    "cucumber": "^6.0.5"
+  }
+}
