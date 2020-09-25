@@ -21,7 +21,7 @@ In this hackathon, we will use the following solutions:
 ![](https://deertek.files.wordpress.com/2018/09/9.png?w=200)
 
 ### steps
-Here a re the different steps we will complete in the hackathon
+Here are the different steps we will complete in the hackathon
 1. install keycloak on a Google Kubernetes Engine (GKE) cluster 
 1. configure a simple Client App and user in keycloak
 1. deploy an API Proxy on Apigee that is able to secure APIs - based on OIDC. All the material is provided on the repo
@@ -222,6 +222,15 @@ Confirm that you want to set password for the user:
 Later, you will be able to check user's consent from the **Consents** tab:
 
 <img src="./pictures/_E.png" width="500">
+
+> A this step, please set the 2 following environment variables, related to the user you have just created:
+
+<pre><code>
+  export <b>KEYCLOAK_USER_USERNAME</b>={username}
+  export <b>KEYCLOAK_USER_PASSWORD</b>={password}
+</code></pre>
+
+...where {username} is the name of the user and {password} is the user's password
 
 The basic configuration we want to implement is over! Let's test it quickly!
 

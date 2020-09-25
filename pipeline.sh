@@ -103,12 +103,16 @@ function set_devapp_product() {
 
 # set env variables for keycloak IdP 
 set_idp_env_var
+
 # deploy Apigee artifacts: developer, app, product cache, kvm and proxy
 mvn install -Ptest -Dapigee.config.options=update
+
 # set developer app (my-client-app) credentials with the exact same values than the one in the keycloak IdP
 set_devapp_credentials
+
 # set developer app (my-client-app) product
 set_devapp_product
+
 # execute integration tests
 npm i
 npm test

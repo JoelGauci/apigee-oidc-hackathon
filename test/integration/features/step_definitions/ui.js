@@ -23,7 +23,7 @@ const {
 const puppeteer = require('puppeteer')
 const org = process.env.APIGEE_ORG
 const env = 'test'
-const state='123'
+const state='123-abc'
 
 Given('I navigate to the authorize page', async function() {
   this.browser = await puppeteer.launch({
@@ -38,9 +38,9 @@ Given('I navigate to the authorize page', async function() {
 When('I sign in and consent', async function() {
   //fill in login page
   await this.page.click('#username')
-  await this.page.keyboard.type('jeanmartin')
+  await this.page.keyboard.type(this.apickli.scenarioVariables.username)
   await this.page.click('#password')
-  await this.page.keyboard.type('Passw0rd!')
+  await this.page.keyboard.type(this.apickli.scenarioVariables.password)
   
   //submit
   await Promise.all([

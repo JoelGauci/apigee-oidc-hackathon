@@ -20,16 +20,20 @@ const {
   Given,
   setDefaultTimeout
 } = require('cucumber')
-const fs = require('fs')
+
 const org = process.env.APIGEE_ORG
 const env = 'test'
 const clientSecret = process.env.APP_CLIENT_SECRET
+const username = process.env.KEYCLOAK_USER_USERNAME
+const password = process.env.KEYCLOAK_USER_PASSWORD
 
 Before(function() {
   this.apickli = new apickli.Apickli('https',
     org + '-' + env + '.apigee.net')
   this.apickli.scenarioVariables.clientId = 'my-client-app'
   this.apickli.scenarioVariables.clientSecret = clientSecret
+  this.apickli.scenarioVariables.username = username
+  this.apickli.scenarioVariables.password = password
 })
 
 setDefaultTimeout(60 * 1000)
