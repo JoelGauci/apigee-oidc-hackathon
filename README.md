@@ -351,6 +351,8 @@ The response should be similar to the following one:
 <b>APIGEE_PASSWORD</b> is set!
 <b>KEYCLOAK_HOST_NAME</b> is set!
 <b>APP_CLIENT_SECRET</b> is set!
+<b>KEYCLOAK_USER_USERNAME</b> is set!
+<b>KEYCLOAK_USER_PASSWORD</b> is set!
 </code></pre>
 
 In case of a problem with one or several env variables, it is time to fix it!
